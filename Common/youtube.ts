@@ -13,6 +13,7 @@ export async function getLatestYoutubeVideo(youtubeId: string, apiKey: string): 
 }
 
 export async function updateSubCountChannel(ctx: Context): Promise<void> {
+    if (!ctx.env.get("youtube_id")) return;
     const data = await getYoutubeChannel<{ [key: string]: any }>(ctx.env.get("youtube_id"), getRandomYoutubeAPIKey(ctx));
     const json = await data.json();
     const subscriberCount: string = String(numeral(json.items[0].statistics.subscriberCount).format('0.00a')).toUpperCase();

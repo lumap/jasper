@@ -26,6 +26,7 @@ export async function RunNotifyVideoDiscussionsSubCommand(ctx: Context, interact
             delete require.cache[require.resolve(latestThreadPath)];
 
             const latestVideoFile: { video: string } = require(latestVideoPath);
+            if (!ctx.env.get("youtube_id")) return interaction.reply({ content: "No YouTube ID found in the environment variables.", ephemeral: true });
             const latest = await getLatestYoutubeVideo(ctx.env.get("youtube_id"), getRandomYoutubeAPIKey(ctx));
 
             if (latestVideoFile.video !== latest.id) {

@@ -36,7 +36,7 @@ export function writeToThreadIdFile(threadId: string): void {
 }
 
 async function postNewVideo(): Promise<void> {
-  if (ctx.env.get("youtube_post_update") == "0") return;
+  if (!ctx.env.get("youtube_post_update") || ctx.env.get("youtube_post_update") == "0") return;
   // Ensure the files exist
   if (!fs.existsSync("latestvideo.json")) fs.writeFileSync("latestvideo.json", JSON.stringify({ video: "" }));
   if (!fs.existsSync("latestthread.json")) fs.writeFileSync("latestthread.json", JSON.stringify({ thread: "" }));
@@ -98,7 +98,7 @@ async function main() {
   });
 
   await Promise.all(handlers);
-  
+
   SetupMongo({ uri: ctx.env.get("db") });
   setInterval(postNewVideo, ctx.env.get("youtube_post_timer"));
 }
